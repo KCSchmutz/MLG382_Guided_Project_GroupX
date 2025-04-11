@@ -66,7 +66,7 @@ Parental Involvement
    3: High  
    4: Very High  
 ### Extracurricular Activities 
-  * Extracurricular: Participation in extracurricular activities, where 0 indicates No and - [ ]
+  * Extracurricular: Participation in extracurricular activities, where 0 indicates No and -[ ]
    1 indicates Yes.  
   * Sports: Participation in sports, where 0 indicates No and 1 indicates Yes.  - [ ]
   * Music: Participation in music activities, where 0 indicates No and 1 indicates Yes. - [ ]
@@ -82,21 +82,30 @@ Target Variable: Grade Class  - [ ]
    2: 'C' (2.5 <= GPA < 3.0)  
    3: 'D' (2.0 <= GPA < 2.5)  
    4: 'F' (GPA < 2.0)
+> Noah Blaauw
+> - [ ]
 -------------------------------------------------------------------------------------------------------------------
 # Project Structure
 1. Problem Statement 
 2. Hypothesis Generation 
 3. Getting the system ready and loading the data 
-4. Understanding the data 
+4. Understanding the data
 5. Exploratory Data Analysis 
- i. Perform Univariate Analysis 
- ii. Perform Bivariate Analysis  
-6. Missing value and outlier treatment 
+ 1. Perform Univariate Analysis 
+ 2. Perform Bivariate Analysis
+> Karl Christiaan Schmutz
+> - [ ]
+---------------------------------------------------------------------
+6. Missing value and outlier treatment
 7. Evaluation Metrics for classification problem 
 8. Feature engineering 
 9. Model Building: Part 1 (Apply baseline machine learning classification algorithms: 
 Logistic Regression, Random Forest, and XGBoost with step 8) 
-10. Model building: part 2 (Apply Deep Learning classification algorithm with step 8) 
+10. Model building: part 2 (Apply Deep Learning classification algorithm with step 8)
+> Gordan Mullin
+> - [ ]
+---------------------------------------------------------------------
+
 11. Model deployment - Dash app on https://www.render.com
-12. ---------------------------------------------------------------------------------------------------------------------------
-13. ##### Based on this template can you develop a guided project for the given data 
+---------------------------------------------------------------------------------------------------------------------------
+##### Based on this template can you develop a guided project for the given data 
