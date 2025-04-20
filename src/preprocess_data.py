@@ -17,10 +17,11 @@ def scale_and_encode(df):
 
     #Initialization of StandardScaler
     scaler = StandardScaler()
-    scalar_features = df.columns.drop(["Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
+    numeric_features = df.columns.drop(["GPA" ,"Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
     # update the cols with their normalized values
-    scaler.fit(df_transformed[scalar_features])
-    df_transformed[scalar_features] = scaler.transform(df_transformed[scalar_features])
+    scaler.fit(df_transformed[numeric_features])
+    df_transformed[numeric_features] = scaler.transform(df_transformed[numeric_features])
+    
     return df_transformed
 
 #Fuction that removes anomalies using Isolation Forest
@@ -43,8 +44,13 @@ def remove_outliers(df, column):
     upper_bound = Q3 + 1.5 * IQR
 
     #Returns the DataFrame to keep only the rows values in the IQR range
+    
     return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
+def get_numeric_columns(df):
+    df=pd.DataFrame(df)
+    df_numeric = df.columns.drop(["GPA" ,"Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
+    return df_numeric
 
 #Function that loops over and over to remove all outliers (Not all outliers are removed after one iteration)
 def iterative_outlier_removal(df, numerical_columns):
@@ -68,3 +74,4 @@ def iterative_outlier_removal(df, numerical_columns):
             break
 
     return df
+

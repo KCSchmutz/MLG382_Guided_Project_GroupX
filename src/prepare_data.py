@@ -5,11 +5,9 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 #Function to load data
 def load_data(filepath):
-
     #Loads data into the DataFrame
     df = pd.read_csv(filepath)
     
-
     #Drop rows and columns that are completely null
     df = df.dropna(how='all')  # Drop rows that are all NaN
     df = df.dropna(axis=1, how='all')  # Drop columns that are all NaN
@@ -30,7 +28,6 @@ def load_data(filepath):
                 #Fills columns with mode
                 df[column] = df[column].fillna(df[column].mode()[0])
 
-
     # Drops duplicate rows
     df = df.drop_duplicates()
 
@@ -42,17 +39,29 @@ def load_data(filepath):
     df2['ParentalEducation'] = df2['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
     df2['ParentalSupport'] = df2['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
     
-    # Feature Engineering: 
-    # Add 3 new columns to the DataFrame
-    df3 = df2
-    # The 1st feature is to determine if the student outside activities are productive
-    df3['Constructive_Extracurricular'] = df3.apply(lambda row: row['Extracurricular'] or ((row['Sports'] or row['Music']) or row['Volunteering']), axis=1)
-    # The 2nd feature is to determine if a student is receiving support in their school life
-    limiting_performance = ['None', 'Low', 'Moderate']
-    df3['Receives_Support'] = df3.apply(lambda row:0 if ((row['Tutoring'] == 0) and (row['ParentalSupport'] in limiting_performance)) else 1, axis=1)
-    # The 3rd is to determine the amount of study hours the student is busy catching up on work perweek
-    weeks_in_a_year = 52
-    df3['Catch_up_study_hours'] = df3.apply(lambda row: np.round(row['StudyTimeWeekly'] ** ((row['Absences'] / weeks_in_a_year)),2), axis=1)
+    return df
 
+def catagorical_column_transformations(df):
+    df = pd.DataFrame(df)
+    df=df.drop(columns=["StudentID", "GradeClass"])
+    # Add a mask to transform the categorical features
+    # Replace values of categorical features that are not encoded
+    df['Gender'] = df['Gender'].replace({0: 'Male', 1: 'Female'})
+    df['Ethnicity'] = df['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
+    df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
+    df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
     
     return df
+
+def feature_engineering(df):
+    df = pd.DataFrame(df)
+    # Feature Engineering: 
+    # Add 3 new columns to the DataFrame
+    # The 1st feature is to determine if the student outside activities are productive
+    df['Constructive_Extracurricular'] = df.apply(lambda row: row['Extracurricular'] or ((row['Sports'] or row['Music']) or row['Volunteering']), axis=1)
+    # The 2nd feature is to determine if a student is receiving support in their school life
+    limiting_performance = ['None', 'Low', 'Moderate']
+    df['Receives_Support'] = df.apply(lambda row:0 if ((row['Tutoring'] == 0) and (row['ParentalSupport'] in limiting_performance)) else 1, axis=1)
+    # The 3rd is to determine the amount of study hours the student is busy catching up on work perweek
+    weeks_in_a_year = 52
+    df['Catch_up_study_hours'] = df.apply(lambda row: np.round(row['StudyTimeWeekly'] ** ((row['Absences'] / weeks_in_a_year)),2), axis=1)    
