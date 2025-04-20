@@ -88,7 +88,7 @@ Target Variable: Grade Class
    3: 'D' (2.0 <= GPA < 2.5)  
    4: 'F' (GPA < 2.0)
 > Noah Blaauw
-> - [ ]
+- [ ]
 -------------------------------------------------------------------------------------------------------------------
 # Project Structure
 1. Problem Statement 
@@ -99,7 +99,7 @@ Target Variable: Grade Class
  1. Perform Univariate Analysis 
  2. Perform Bivariate Analysis
 > Karl Christiaan Schmutz
-> - [ ]
+- [*]
 ---------------------------------------------------------------------
 6. Missing value and outlier treatment
 7. Evaluation Metrics for classification problem 
@@ -108,7 +108,7 @@ Target Variable: Grade Class
 Logistic Regression, Random Forest, and XGBoost with step 8) 
 10. Model building: part 2 (Apply Deep Learning classification algorithm with step 8)
 > Gordan Mullin
-> - [ ]
+- [ ]
 ---------------------------------------------------------------------
 
 11. Model deployment - Dash app on https://www.render.com
