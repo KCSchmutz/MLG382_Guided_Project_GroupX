@@ -21,7 +21,7 @@ from xgboost import XGBRegressor
 
 
 # Function to split the dataset dropping column (Objective is to predict profit)
-def split_features_target(df, target_column='GPA'):
+def split_features_target(df, target_column = 'GradeClass'):
     X = df.drop(target_column, axis=1)
     Y = df[target_column]
     return X, Y
@@ -54,10 +54,10 @@ def create_train_test_split(X, Y, test_size=0.2, random_state=2000, save_csv=Tru
         # Only saves if the files don't already exist
         if not os.path.exists(train_path) or not os.path.exists(test_path):
             train_df = X_train.copy()
-            train_df["GPA"] = Y_train
+            train_df["GradeClass"] = Y_train
 
             test_df = X_test.copy()
-            test_df["GPA"] = Y_test
+            test_df["GradeClass"] = Y_test
 
             train_df.to_csv(train_path, index=False)
             test_df.to_csv(test_path, index=False)
@@ -180,8 +180,8 @@ def train_model(model, model_name, X_train, X_test, Y_train, Y_test, output_dir=
     plt.figure(figsize=(6, 4))
     plt.scatter(Y_test, Y_pred, alpha=0.7)
     plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], 'r--')
-    plt.xlabel("Actual GPA")
-    plt.ylabel("Predicted GPA")
+    plt.xlabel("Actual GradeClass")
+    plt.ylabel("Predicted GradeClass")
     plt.title(f"{model_name} - Predicted vs Actual")
     plt.tight_layout()
     plt.show()
@@ -192,7 +192,7 @@ def train_model(model, model_name, X_train, X_test, Y_train, Y_test, output_dir=
     plt.plot(range(len(Y_pred)), Y_pred, label="Predicted", marker='x')
     plt.title(f"{model_name} - Predicted vs Actual")
     plt.xlabel("Count")
-    plt.ylabel("GPA")
+    plt.ylabel("GradeClass")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()

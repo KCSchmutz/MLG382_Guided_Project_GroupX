@@ -5,24 +5,31 @@ from sklearn.ensemble import IsolationForest
 from category_encoders import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
+from sklearn.preprocessing import LabelEncoder
+
 #Function to scale features using StandardScaler and Encoded using OneHotEncoder ~ Normalising the data
 def scale_and_encode(df):
+    
+# Encode the target variable
+    label_encoder = LabelEncoder()
+    df['GradeClass'] = label_encoder.fit_transform(df['GradeClass'])
     #Initialization of StandardScaler
     scaler = StandardScaler()
-    numeric_features = df.columns.drop(["GPA" ,"Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
+    numeric_features = df.columns.drop(["Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
     # update the cols with their normalized values
     scaler.fit(df[numeric_features])
     df[numeric_features] = scaler.transform(df[numeric_features])
     #Identify categorical columns (columns with datatype of 'object' and 'category')
-    categorical_features = df.select_dtypes(include=['object', 'category']).columns.tolist()
+    categorical_features=df.columns.drop(["GradeClass","GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
     df_transformed = pd.get_dummies(df, columns=categorical_features, drop_first=True)
     return df_transformed
 
 #Fuction that removes anomalies using Isolation Forest
 def remove_anomalies(df):
     iso = IsolationForest(contamination=0.01, random_state=42)
-    numeric_features = df.columns.drop(["GPA" ,"Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
-    outliers = iso.fit_predict(df[numeric_features])
+    numeric_data = df.select_dtypes(include=['number']).columns.tolist()
+    #numeric_features = df.columns.drop(["Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
+    outliers = iso.fit_predict(df[numeric_data])
     df_cleaned = df[outliers == 1]
     return df_cleaned
 
@@ -42,13 +49,12 @@ def remove_outliers(df, column):
     return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
 def get_numeric_columns(df):
-    output_var = 'GPA'
     numeric_data = df.select_dtypes(include=['number']).columns.tolist()
-    numeric_features = [col for col in numeric_data if col != output_var]
+    numeric_features = [col for col in numeric_data]
     return numeric_features
 
 def make_Onehot(df):
-    categorical_features=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
+    categorical_features=df.columns.drop(["GradeClass","GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
     for col in categorical_features:
         df[col] = df[col].replace({False: 0.0, True: 1.0})
     return df
