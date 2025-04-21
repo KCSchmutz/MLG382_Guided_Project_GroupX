@@ -31,15 +31,15 @@ def load_data(filepath):
     # Drops duplicate rows
     df = df.drop_duplicates()
 
-    df=df.drop(columns=["StudentID", "GradeClass"])
+    df=df.drop(columns=["StudentID"])
     # Add a mask to transform the categorical features
     # Replace values of categorical features that are not encoded
     df['Gender'] = df['Gender'].replace({0: 'Male', 1: 'Female'})
     df['Ethnicity'] = df['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
     df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
     df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
-    
-    return df.head(10)
+    df['GradeClass'] = df.apply(lambda row:'A' if (row['GPA']>=3.5) else 'B' if(row['GPA']<3.5 and row['GPA']>=3) else 'C' if(row['GPA']<3 and row['GPA']>=2.5) else 'D' if(row['GPA']<2.5 and row['GPA']>=2.0) else 'F', axis=1)
+    return df
 
 def catagorical_column_transformations(df):
     # Add a mask to transform the categorical features
