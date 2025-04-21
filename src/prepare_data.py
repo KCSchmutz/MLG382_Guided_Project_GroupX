@@ -31,18 +31,6 @@ def load_data(filepath):
     # Drops duplicate rows
     df = df.drop_duplicates()
 
-    df2=df.drop(columns=["StudentID", "GradeClass"])
-    # Add a mask to transform the categorical features
-    # Replace values of categorical features that are not encoded
-    df2['Gender'] = df2['Gender'].replace({0: 'Male', 1: 'Female'})
-    df2['Ethnicity'] = df2['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
-    df2['ParentalEducation'] = df2['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
-    df2['ParentalSupport'] = df2['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
-    
-    return df
-
-def catagorical_column_transformations(df):
-    df = pd.DataFrame(df)
     df=df.drop(columns=["StudentID", "GradeClass"])
     # Add a mask to transform the categorical features
     # Replace values of categorical features that are not encoded
@@ -51,17 +39,31 @@ def catagorical_column_transformations(df):
     df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
     df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
     
+    return df.head(10)
+
+def catagorical_column_transformations(df):
+    # Add a mask to transform the categorical features
+    # Replace values of categorical features that are not encoded
+    df['Gender'] = df['Gender'].replace({0: 'Male', 1: 'Female'})
+    df['Ethnicity'] = df['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
+    df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
+    df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
+    df['Tutoring'] = df['Tutoring'].replace({0: 'No', 1: 'Yes'})
+    df['Extracurricular'] = df['Extracurricular'].replace({0: 'No', 1: 'Yes'})
+    df['Sports'] = df['Sports'].replace({0: 'No', 1: 'Yes'})
+    df['Music'] = df['Music'].replace({0: 'No', 1: 'Yes'})
+    df['Volunteering'] = df['Volunteering'].replace({0: 'No', 1: 'Yes'})
     return df
 
 def feature_engineering(df):
-    df = pd.DataFrame(df)
     # Feature Engineering: 
     # Add 3 new columns to the DataFrame
     # The 1st feature is to determine if the student outside activities are productive
-    df['Constructive_Extracurricular'] = df.apply(lambda row: row['Extracurricular'] or ((row['Sports'] or row['Music']) or row['Volunteering']), axis=1)
+    df['Constructive_Extracurricular'] = df.apply(lambda row:'Yes' if ((row['Extracurricular']=='Yes') or (((row['Sports']=='Yes') or (row['Music']=='Yes')) or (row['Volunteering']=='Yes'))) else 'No', axis=1)
     # The 2nd feature is to determine if a student is receiving support in their school life
     limiting_performance = ['None', 'Low', 'Moderate']
-    df['Receives_Support'] = df.apply(lambda row:0 if ((row['Tutoring'] == 0) and (row['ParentalSupport'] in limiting_performance)) else 1, axis=1)
+    df['Receives_Support'] = df.apply(lambda row:'No' if ((row['Tutoring'] == 'No') and (row['ParentalSupport'] in limiting_performance)) else 'Yes', axis=1)
     # The 3rd is to determine the amount of study hours the student is busy catching up on work perweek
     weeks_in_a_year = 52
-    df['Catch_up_study_hours'] = df.apply(lambda row: np.round(row['StudyTimeWeekly'] ** ((row['Absences'] / weeks_in_a_year)),2), axis=1)    
+    df['Catch_up_study_hours'] = df.apply(lambda row: np.round(row['StudyTimeWeekly'] ** ((row['Absences'] / weeks_in_a_year)),2), axis=1)
+    return df    
