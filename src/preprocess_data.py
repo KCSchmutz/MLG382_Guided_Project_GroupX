@@ -73,5 +73,5 @@ def iterative_outlier_removal(df, numerical_columns):
             #If it is the loop breaks signaling that there are no more outliers
             break
 
-    return df
+    return df 
 
