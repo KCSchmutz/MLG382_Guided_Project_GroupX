@@ -12,6 +12,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LogisticRegression
@@ -206,7 +207,7 @@ def train_random_forest():
 
 #Function that trains GradientBoostingRegressor model
 def train_logistic_regresion():
-    model = LogisticRegression(max_iter=2500)
+    model = LogisticRegression(solver='liblinear', max_iter=100)
     return model
 
 #Function that trains AdaBoostRegressor model

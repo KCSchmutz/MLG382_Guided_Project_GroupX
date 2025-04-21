@@ -48,9 +48,9 @@ def get_numeric_columns(df):
     return numeric_features
 
 def make_Onehot(df):
-    categorical_features = df.select_dtypes(include=['object', 'category']).columns.tolist()
+    categorical_features=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
     for col in categorical_features:
-        df[col] = df[col].replace({'False': 0.0, 'True': 1.0})
+        df[col] = df[col].replace({False: 0.0, True: 1.0})
     return df
 
 #Function that loops over and over to remove all outliers (Not all outliers are removed after one iteration)
@@ -74,4 +74,3 @@ def iterative_outlier_removal(df, numerical_columns):
             break
 
     return df 
-

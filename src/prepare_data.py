@@ -44,10 +44,6 @@ def load_data(filepath):
 def catagorical_column_transformations(df):
     # Add a mask to transform the categorical features
     # Replace values of categorical features that are not encoded
-    df['Gender'] = df['Gender'].replace({0: 'Male', 1: 'Female'})
-    df['Ethnicity'] = df['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
-    df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
-    df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
     df['Tutoring'] = df['Tutoring'].replace({0: 'No', 1: 'Yes'})
     df['Extracurricular'] = df['Extracurricular'].replace({0: 'No', 1: 'Yes'})
     df['Sports'] = df['Sports'].replace({0: 'No', 1: 'Yes'})
