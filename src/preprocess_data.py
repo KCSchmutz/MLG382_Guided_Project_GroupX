@@ -1,5 +1,7 @@
 #Importing all required libraries
 import pandas as pd
+import random
+import importlib
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 from category_encoders import OneHotEncoder
@@ -9,20 +11,19 @@ from sklearn.preprocessing import LabelEncoder
 
 #Function to scale features using StandardScaler and Encoded using OneHotEncoder ~ Normalising the data
 def scale_and_encode(df):
-    
-# Encode the target variable
-    label_encoder = LabelEncoder()
-    df['GradeClass'] = label_encoder.fit_transform(df['GradeClass'])
-    #Initialization of StandardScaler
+    # Reload the module to reflect changes (Don't have to restart Kernel everytime if this is included)
     scaler = StandardScaler()
-    numeric_features = df.columns.drop(["Age", "Gender", "Ethnicity", "ParentalEducation", "ParentalSupport", "Tutoring", "Extracurricular", "Sports", "Music", "Volunteering", "Constructive_Extracurricular", "Receives_Support"])
+    numeric_data = df.select_dtypes(include=['number']).columns.tolist()
+    numeric_features = [col for col in numeric_data]
     # update the cols with their normalized values
     scaler.fit(df[numeric_features])
     df[numeric_features] = scaler.transform(df[numeric_features])
     #Identify categorical columns (columns with datatype of 'object' and 'category')
-    categorical_features=df.columns.drop(["GradeClass","GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
-    df_transformed = pd.get_dummies(df, columns=categorical_features, drop_first=True)
-    return df_transformed
+    categorical_features=df.select_dtypes(include=['object', 'category']).columns.tolist()
+    df = pd.get_dummies(df, columns=categorical_features, drop_first=True)
+    cat=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
+    print(cat)
+    return df
 
 #Fuction that removes anomalies using Isolation Forest
 def remove_anomalies(df):
@@ -33,6 +34,15 @@ def remove_anomalies(df):
     df_cleaned = df[outliers == 1]
     return df_cleaned
 
+# Function that encodes the Y column
+def encode_target(df, target_column):
+    encoded =[]
+    temp=0.0
+    for i in range(5):
+        temp += i*0.2 + random.uniform(0.01, 0.001)
+        encoded.append(temp)
+    df['GradeClass'] = df.apply(lambda row: encoded[0] if (row[target_column]=='A') else encoded[1] if (row[target_column]=='B') else encoded[2] if (row[target_column]=='C') else encoded[3] if (row[target_column]=='D') else encoded[4], axis=1)
+    return df
 #Function to remove outliers
 def remove_outliers(df, column):
     #Using Interquartile Range (IQR) Approach
@@ -54,7 +64,7 @@ def get_numeric_columns(df):
     return numeric_features
 
 def make_Onehot(df):
-    categorical_features=df.columns.drop(["GradeClass","GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
+    categorical_features=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"]).tolist()
     for col in categorical_features:
         df[col] = df[col].replace({False: 0.0, True: 1.0})
     return df
