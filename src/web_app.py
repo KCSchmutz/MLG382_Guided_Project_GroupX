@@ -25,9 +25,6 @@ def get_xgboost_model():
     with open(os.path.join(artifacts_dir, 'xgboost_model.pkl'), 'rb') as f:
         return pickle.load(f)
 
-with open(os.path.join(artifacts_dir, 'features.pkl'), 'rb') as f:
-    features = pickle.load(f)
-
 def get_scaler():
     with open(os.path.join(artifacts_dir, 'scaler_test.pkl'), 'rb') as f:
         return pickle.load(f)
