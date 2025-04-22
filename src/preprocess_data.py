@@ -14,15 +14,14 @@ def scale_and_encode(df):
     # Reload the module to reflect changes (Don't have to restart Kernel everytime if this is included)
     scaler = StandardScaler()
     numeric_data = df.select_dtypes(include=['number']).columns.tolist()
-    numeric_features = [col for col in numeric_data]
+    numeric_features = [col for col in numeric_data if col != 'GPA']
     # update the cols with their normalized values
     scaler.fit(df[numeric_features])
     df[numeric_features] = scaler.transform(df[numeric_features])
     #Identify categorical columns (columns with datatype of 'object' and 'category')
     categorical_features = df.select_dtypes(include=['object', 'category']).columns.tolist()
-    categorical_features = [col for col in categorical_features if col != 'GradeClass']
+    categorical_features = [col for col in categorical_features]
     df = pd.get_dummies(df, columns=categorical_features, drop_first=True)
-    cat=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
     return df
 
 #Fuction that removes anomalies using Isolation Forest
@@ -34,15 +33,6 @@ def remove_anomalies(df):
     df_cleaned = df[outliers == 1]
     return df_cleaned
 
-# Function that encodes the Y column
-def encode_target(df, target_column):
-    encoded =[]
-    temp=0.0
-    for i in range(5):
-        temp += i*0.2 + random.uniform(0.01, 0.001)
-        encoded.append(temp)
-    df['GradeClass'] = df.apply(lambda row: encoded[0] if (row[target_column]=='A') else encoded[1] if (row[target_column]=='B') else encoded[2] if (row[target_column]=='C') else encoded[3] if (row[target_column]=='D') else encoded[4], axis=1)
-    return df
 #Function to remove outliers
 def remove_outliers(df, column):
     #Using Interquartile Range (IQR) Approach

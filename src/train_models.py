@@ -20,12 +20,19 @@ from xgboost import XGBRegressor
 
 
 def split_features_target(df):
-    #expected_targets = ['GradeClass_A', 'GradeClass_B', 'GradeClass_C', 'GradeClass_D', 'GradeClass_F']
-    # Filter to only columns that actually exist
-    target_columns = "GradeClass"
+    # Define the target column
+    target_column = "GPA"
     
-    Y = df[target_columns]
-    X = df.drop(target_columns)
+    # Check if the target column exists in the DataFrame
+    if target_column not in df.columns:
+        raise ValueError(f"Target column '{target_column}' does not exist in the DataFrame.")
+    
+    # Select the target variable
+    Y = df[target_column]
+    
+    # Drop the target column to create the feature set
+    X = df.drop(columns=[target_column])
+    
     return X, Y
 
     return X, Y
@@ -58,10 +65,10 @@ def create_train_test_split(X, Y, test_size=0.2, random_state=2000, save_csv=Tru
         # Only saves if the files don't already exist
         if not os.path.exists(train_path) or not os.path.exists(test_path):
             train_df = X_train.copy()
-            train_df["GradeClass"] = Y_train
+            train_df["GPA"] = Y_train
 
             test_df = X_test.copy()
-            test_df["GradeClass"] = Y_test
+            test_df["GPA"] = Y_test
 
             train_df.to_csv(train_path, index=False)
             test_df.to_csv(test_path, index=False)
