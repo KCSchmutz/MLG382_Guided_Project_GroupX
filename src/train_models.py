@@ -21,8 +21,9 @@ from xgboost import XGBRegressor
 
 
 # Function to split the dataset dropping column (Objective is to predict profit)
-def split_features_target(df, target_column = 'GradeClass'):
-    X = df.drop(target_column, axis=1)
+def split_features_target(df):
+    target_column =['GradeClass_A', 'GradeClass_B','GradeClass_C','GradeClass_D','GradeClass_F']
+    X = df.drop(target_column)
     Y = df[target_column]
     return X, Y
 # Function to save the feature importance
