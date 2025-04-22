@@ -19,12 +19,15 @@ from sklearn.linear_model import LogisticRegression
 from xgboost import XGBRegressor
 
 
-
-# Function to split the dataset dropping column (Objective is to predict profit)
 def split_features_target(df):
-    target_column =['GradeClass_A', 'GradeClass_B','GradeClass_C','GradeClass_D','GradeClass_F']
-    X = df.drop(target_column)
-    Y = df[target_column]
+    #expected_targets = ['GradeClass_A', 'GradeClass_B', 'GradeClass_C', 'GradeClass_D', 'GradeClass_F']
+    # Filter to only columns that actually exist
+    target_columns = "GradeClass"
+    
+    Y = df[target_columns]
+    X = df.drop(target_columns)
+    return X, Y
+
     return X, Y
 # Function to save the feature importance
 def save_feature_importance(model, save_csv=True):
