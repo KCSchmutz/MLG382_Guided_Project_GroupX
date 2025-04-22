@@ -38,7 +38,12 @@ def load_data(filepath):
     df['Ethnicity'] = df['Ethnicity'].replace({0: 'Caucasian', 1: 'African American', 2: 'Asian', 3: 'Other'})
     df['ParentalEducation'] = df['ParentalEducation'].replace({0: 'None', 1: 'High School', 2: 'Some College', 3: 'Bachelors', 4: 'Higher Study'})
     df['ParentalSupport'] = df['ParentalSupport'].replace({0: 'None', 1: 'Low', 2: 'Moderate', 3: 'High', 4: 'Very High'})
-    df['GradeClass'] = df.apply(lambda row:'A' if (row['GPA']>=3.5) else 'B' if(row['GPA']<3.5 and row['GPA']>=3) else 'C' if(row['GPA']<3 and row['GPA']>=2.5) else 'D' if(row['GPA']<2.5 and row['GPA']>=2.0) else 'F', axis=1)
+    df['GradeClass'] = df.apply(lambda row: 
+                            'B' if 3.0 <= row['GPA'] < 3.49 else
+                            'C' if 2.5 <= row['GPA'] < 3.0 else
+                            'D' if 2.0 <= row['GPA'] < 2.5 else
+                            'F' if 0.0 <= row['GPA'] < 2.0 else
+                            'A', axis=1)
     return df
 
 def catagorical_column_transformations(df):
