@@ -19,10 +19,10 @@ def scale_and_encode(df):
     scaler.fit(df[numeric_features])
     df[numeric_features] = scaler.transform(df[numeric_features])
     #Identify categorical columns (columns with datatype of 'object' and 'category')
-    categorical_features=df.select_dtypes(include=['object', 'category']).columns.tolist()
+    categorical_features = df.select_dtypes(include=['object', 'category']).columns.tolist()
+    categorical_features = [col for col in categorical_features if col != 'GradeClass']
     df = pd.get_dummies(df, columns=categorical_features, drop_first=True)
     cat=df.columns.drop(["GPA" ,"StudyTimeWeekly", "Absences", "Catch_up_study_hours"])
-    print(cat)
     return df
 
 #Fuction that removes anomalies using Isolation Forest
