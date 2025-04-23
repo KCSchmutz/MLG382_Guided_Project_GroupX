@@ -8,21 +8,22 @@ import os
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 base_dir = os.path.dirname(os.path.abspath(__file__))
-artifacts_dir = os.path.join(base_dir, '..', 'src')
+artifacts_dir = os.path.join(base_dir, '..', 'artifacts')
+
 
 def get_DLmodel():
-    return load_model(os.path.join(artifacts_dir, 'deep_learning_model.h5'))
+    return load_model(os.path.join(artifacts_dir, 'DeepLearning_model_.h5'))
 
 def get_randomforest_model():
-    with open(os.path.join(artifacts_dir, 'random_forest_model.pkl'), 'rb') as f:
+    with open(os.path.join(artifacts_dir, 'RandomForestRegressor_model.pkl'), 'rb') as f:
         return pickle.load(f)
 
 def get_regression_model():
-    with open(os.path.join(artifacts_dir, 'logistic_regression_model.pkl'), 'rb') as f:
+    with open(os.path.join(artifacts_dir, 'LogisticRegression_model.pkl'), 'rb') as f:
         return pickle.load(f)
 
 def get_xgboost_model():
-    with open(os.path.join(artifacts_dir, 'xgboost_model.pkl'), 'rb') as f:
+    with open(os.path.join(artifacts_dir, 'XGBoostRegressor_model.pkl'), 'rb') as f:
         return pickle.load(f)
 
 def get_scaler():
