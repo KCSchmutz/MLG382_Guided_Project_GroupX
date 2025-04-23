@@ -116,6 +116,9 @@ def preprocess_and_save_data(input_path, output_data_path, output_scaler_path):
     grade = df.pop('GradeClass')
     df['GradeClass'] = grade
 
+    if 'GPA' in df.columns:
+        df.drop('GPA', axis=1, inplace=True)
+
     #Save the scaler to a file
     with open(output_scaler_path, "wb") as f:
         pickle.dump(scaler, f)
